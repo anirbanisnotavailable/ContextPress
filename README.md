@@ -19,3 +19,43 @@ No installation or `pip install` required. Simply download `context_press.py` an
 To package your current directory:
 ```bash
 python context_press.py
+This generates a file named codebase_context.md in your root folder.
+Advanced Options
+Specify a target directory and a custom output file name:
+code
+Bash
+python context_press.py /path/to/your/project -o output_capsule.md
+Exclude additional custom directories on-the-fly:
+code
+Bash
+python context_press.py -i "secrets/" "*.log" "temp/"
+📄 Output Format Example
+Your generated capsule file will be structured like this:
+code
+Markdown
+# Codebase Context Capsule
+Generated on: 2026-06-17 15:40:00
+Total Files Packaged: 3
+Estimated Token Count: ~1,250 tokens
+
+## Directory Tree Overview
+📁 my_project/
+    ├── 📄 context_press.py
+    └── src/
+        ├── 📄 main.py
+        └── 📄 utils.py
+
+## Codebase Context Payload
+### File: src/main.py
+```python
+def main():
+    print("Hello world")
+code
+Code
+---
+
+## 🤝 Contributing
+Contributions are highly welcome! Feel free to fork this project, submit issues, or open a pull request to add features like automatic clipboard copying or custom JSON output structures.
+
+## 📝 License
+This project is licensed under the [MIT License](LICENSE).
