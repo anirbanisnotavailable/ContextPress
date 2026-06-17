@@ -16,7 +16,7 @@ When working with AI coding tools, passing code context file-by-file is exhausti
 No installation or `pip install` required. Simply download `context_press.py` and run it.
 
 ### Basic Usage
-To package your current directory:
+To package your current directory, run:
 ```bash
 python context_press.py
 This generates a file named codebase_context.md in your root folder.
@@ -50,6 +50,7 @@ Estimated Token Count: ~1,250 tokens
 ```python
 def main():
     print("Hello world")
+```
 code
 Code
 ---
