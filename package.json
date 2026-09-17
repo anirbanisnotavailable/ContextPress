@@ -1,0 +1,12 @@
+{
+  "name": "contextpress-dev-tests",
+  "version": "1.1.0",
+  "private": true,
+  "description": "Development only test tooling for ContextPress. The product itself (context_press.py and web/) has zero dependencies.",
+  "scripts": {
+    "test": "node tests/test_web_parity.js && node tests/test_web_smoke.js"
+  },
+  "devDependencies": {
+    "jsdom": "^24.1.0"
+  }
+}
