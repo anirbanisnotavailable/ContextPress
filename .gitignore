@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Node, test tooling only
+node_modules/
+
+# Build output
+dist/
+build/
+out/
+
+# OS
+.DS_Store
+
+# Capsule output
+codebase_context.md

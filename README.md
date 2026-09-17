@@ -1,62 +1,128 @@
-# ContextPress 📦🧠
+# ContextPress
 
-A lightweight, zero-dependency command-line utility to compile your project's codebase into a clean, structured Markdown capsule perfect for pasting into LLMs (ChatGPT, Gemini, Claude).
+Package your project into one clean Markdown file your AI assistant can read.
 
-## 🚀 Why ContextPress?
-When working with AI coding tools, passing code context file-by-file is exhausting. **ContextPress** automatically packages your files into a single document while:
-* **Respecting your `.gitignore`** rules so you don't leak private tokens, build folders, or binaries.
-* **Generating a visual tree** directory mapping so the AI understands the architecture of your app.
-* **Providing token approximations** to let you know if your codebase fits inside the AI model's context window.
-* **Requiring absolutely zero installations** or external dependencies. It runs on pure, native Python 3.
+ContextPress walks your codebase, keeps the files that matter, and writes a single capsule: a short header with file count and token estimate, a directory tree, and every source file in a labeled code block. Paste it into your assistant and skip the copy, paste, repeat.
 
----
+Two ways to run it, no dependencies either way:
 
-## 🛠️ Installation & Usage
+- **CLI**: one Python file, standard library only.
+- **Web Studio**: a static page that runs entirely in your browser. Files never leave your machine.
 
-No installation or `pip install` required. Simply download `context_press.py` and run it.
+## CLI
 
-### Basic Usage
-To package your current directory, run:
+Nothing to install. Get `context_press.py` and run it:
+
 ```bash
 python context_press.py
-This generates a file named codebase_context.md in your root folder.
-Advanced Options
-Specify a target directory and a custom output file name:
-code
-Bash
-python context_press.py /path/to/your/project -o output_capsule.md
-Exclude additional custom directories on-the-fly:
-code
-Bash
-python context_press.py -i "secrets/" "*.log" "temp/"
-📄 Output Format Example
-Your generated capsule file will be structured like this:
-code
-Markdown
-# Codebase Context Capsule
-Generated on: 2026-06-17 15:40:00
-Total Files Packaged: 3
-Estimated Token Count: ~1,250 tokens
-
-## Directory Tree Overview
-📁 my_project/
-    ├── 📄 context_press.py
-    └── src/
-        ├── 📄 main.py
-        └── 📄 utils.py
-
-## Codebase Context Payload
-### File: src/main.py
-```python
-def main():
-    print("Hello world")
 ```
-code
-Code
----
 
-## 🤝 Contributing
-Contributions are highly welcome! Feel free to fork this project, submit issues, or open a pull request to add features like automatic clipboard copying or custom JSON output structures.
+That packages the current directory and writes `codebase_context.md` next to it.
 
-## 📝 License
-This project is licensed under the [MIT License](LICENSE).
+Point it at a project and choose the output file:
+
+```bash
+python context_press.py ./my-project -o capsule.md
+```
+
+Add extra ignore patterns on the fly:
+
+```bash
+python context_press.py -i "secrets/" "*.log"
+```
+
+### Options
+
+| Flag | What it does |
+| --- | --- |
+| `dir` | Project root. Defaults to the current directory. |
+| `-o, --output` | Output file. Defaults to `codebase_context.md`. |
+| `-i, --ignore` | Extra patterns to ignore, e.g. `-i "secrets/" "*.log"`. |
+| `--max-file-size` | Skip files larger than N MB. Default 2, use 0 for no limit. |
+| `--no-tree` | Leave the directory tree section out of the capsule. |
+| `--list` | Print the files that would be packaged, then stop. |
+| `--copy` | Also copy the capsule to your clipboard. |
+| `--quiet` | Print nothing except errors. |
+| `--serve` | Serve the Web Studio locally. Adjust with `--host` and `--port`. |
+| `--version` | Print the version. |
+
+## Web Studio
+
+Open `web/index.html` in a browser, or serve it from the CLI:
+
+```bash
+python context_press.py --serve
+```
+
+Choose a folder, or drop one anywhere on the page. The Studio shows the files that will be packaged, the directory tree, live stats, and the capsule itself. Copy it to your clipboard or download it as `codebase_context.md`. Extra ignore patterns and the per file size limit apply instantly.
+
+The page is plain HTML, CSS, and JavaScript. No build step, no network calls, no accounts.
+
+## What the capsule looks like
+
+````markdown
+# Codebase Context
+
+Generated: 2026-09-17 18:05:12
+Files: 4
+Total size: 12.4 KB
+Estimated tokens: ~1,204
+
+## Directory tree
+
+```text
+my-project/
+├── src/
+│   └── main.py
+└── README.md
+```
+
+## Files
+
+### README.md
+```markdown
+# My project
+...
+```
+
+### src/main.py
+```python
+print("hello")
+```
+````
+
+The token estimate divides total characters by four, which tracks closely with how most tokenizers count code.
+
+## How files are picked
+
+A file lands in the capsule only if it clears every rule:
+
+1. It sits outside the directories ContextPress always skips: `.git`, `node_modules`, virtualenvs, build output, IDE folders.
+2. It is not a compiled or binary file: images, audio, fonts, archives.
+3. Your `.gitignore` does not exclude it. Patterns, negations with `!`, and `**` are honored.
+4. It is within the size limit, 2 MB per file by default.
+
+The capsule also never packages its own output file.
+
+## Development
+
+Python tests use the standard library test runner:
+
+```bash
+python -m unittest discover -s tests -p "test_context_press.py" -v
+```
+
+Web tests first check that the browser engine and the Python engine produce the same capsule for the same project, then load the page in jsdom and drive a full folder load. They need Node plus one dev dependency:
+
+```bash
+npm install
+npm test
+```
+
+## Credits
+
+The animated buttons and micro-interactions in the Web Studio are adapted from [Amicro](https://amicro.vercel.app).
+
+## License
+
+MIT. See [LICENSE](LICENSE).

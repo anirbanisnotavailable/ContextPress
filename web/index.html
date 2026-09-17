@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ContextPress: one codebase, one context file</title>
+  <meta name="description" content="ContextPress folds your project into a single Markdown capsule for AI assistants. It runs in your browser, honors your .gitignore, and estimates token counts.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="bg" aria-hidden="true"></div>
+
+  <header class="nav">
+    <a class="brand" href="#top" id="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3 3 8l9 5 9-5-9-5z"/>
+          <path d="M3 12.5l9 5 9-5"/>
+          <path d="M3 17l9 5 9-5"/>
+        </svg>
+      </span>
+      ContextPress
+    </a>
+    <nav class="nav-links">
+      <a href="#cli" class="nav-link" data-home-link>CLI</a>
+      <a class="btn btn-pill btn-sparkle" href="https://github.com/anirbanisnotavailable/ContextPress" target="_blank" rel="noreferrer">
+        <span class="icon-swap" data-swap="sparkle">
+          <span class="i i1" data-icon="github"></span>
+          <span class="i i2" data-icon="star"></span>
+          <span class="spark s1" aria-hidden="true"></span>
+          <span class="spark s2" aria-hidden="true"></span>
+        </span>
+        <span class="lbl">Star on GitHub</span>
+      </a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- ============================== HOME ============================== -->
+    <section class="home" id="home">
+      <div class="hero">
+        <div class="badge rise" style="--d:.05s">Runs in your browser. Nothing is uploaded.</div>
+        <h1 class="rise" style="--d:.12s">Your codebase,<br>one clean context file.</h1>
+        <p class="sub rise" style="--d:.22s">ContextPress folds your project into a single Markdown capsule that your AI assistant can read in one paste. It honors your .gitignore, skips binaries, and tells you the token cost before you send anything.</p>
+        <div class="cta-row rise" style="--d:.32s">
+          <button id="choose" class="btn btn-primary btn-magnetic" data-magnetic>
+            <span class="btn-glow" aria-hidden="true"></span>
+            <span class="icon" data-icon="folder"></span>
+            <span class="lbl">Choose folder</span>
+          </button>
+          <a href="#cli" class="btn btn-pill btn-slide" data-home-link>
+            <span class="btn-glow" aria-hidden="true"></span>
+            <span class="icon-swap" data-swap="slide">
+              <span class="i i1" data-icon="terminal"></span>
+              <span class="i i2" data-icon="arrow-right"></span>
+            </span>
+            <span class="lbl">Try the CLI</span>
+          </a>
+        </div>
+        <p class="hint rise" style="--d:.42s">or drop a folder anywhere on this page</p>
+      </div>
+
+      <section class="features" id="features">
+        <div class="feature reveal">
+          <div class="feature-num">01</div>
+          <h3>Respects .gitignore</h3>
+          <p>Secrets, build output, and dependency folders stay out automatically. Add your own patterns if something else needs to be hidden.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="feature-num">02</div>
+          <h3>Readable structure</h3>
+          <p>The capsule opens with a directory tree, so the model sees how your project fits together before it reads a single line of code.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="feature-num">03</div>
+          <h3>Token aware</h3>
+          <p>File count, total size, and an estimated token count help you judge whether the context fits your model window.</p>
+        </div>
+      </section>
+
+      <section class="cli" id="cli">
+        <div class="reveal">
+          <h2>Prefer the terminal?</h2>
+          <p class="cli-sub">The same tool ships as a single Python file. No install, no dependencies.</p>
+          <pre class="code-block"><code>python context_press.py</code></pre>
+          <p class="code-note">That reads the current directory and writes <code>codebase_context.md</code> next to it.</p>
+        </div>
+        <div class="reveal">
+          <pre class="code-block"><code>python context_press.py ./my-project -o capsule.md
+python context_press.py -i "secrets/" "*.log"
+python context_press.py --list
+python context_press.py --serve</code></pre>
+          <table class="opts">
+            <tr><td><code>dir</code></td><td>project root, defaults to the current directory</td></tr>
+            <tr><td><code>-o, --output</code></td><td>output file, defaults to <code>codebase_context.md</code></td></tr>
+            <tr><td><code>-i, --ignore</code></td><td>extra patterns to ignore, e.g. <code>secrets/</code> <code>*.log</code></td></tr>
+            <tr><td><code>--max-file-size</code></td><td>skip files larger than N MB, default 2, use 0 for none</td></tr>
+            <tr><td><code>--no-tree</code></td><td>omit the directory tree section</td></tr>
+            <tr><td><code>--list</code></td><td>print the files that would be packaged, then stop</td></tr>
+            <tr><td><code>--copy</code></td><td>also copy the capsule to your clipboard</td></tr>
+            <tr><td><code>--serve</code></td><td>open this web app locally with <code>--host</code> and <code>--port</code></td></tr>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <!-- ============================= STUDIO ============================= -->
+    <section class="studio" id="studio" hidden>
+      <div class="studio-top">
+        <button id="startOver" class="btn btn-ghost btn-rotate">
+          <span class="icon-swap" data-swap="rotate" data-icon="refresh"></span>
+          <span class="lbl">Start over</span>
+        </button>
+        <div class="studio-title">
+          <span class="studio-name" id="projectName">project</span>
+          <span class="studio-status" id="status" hidden></span>
+        </div>
+        <div class="studio-actions">
+          <button id="copyBtn" class="btn btn-pill btn-morph">
+            <span class="btn-glow" aria-hidden="true"></span>
+            <span class="icon-swap" data-swap="morph">
+              <span class="i i1" data-icon="copy"></span>
+              <span class="i i2" data-icon="check"></span>
+            </span>
+            <span class="lbl-stack"><span class="lbl" data-lbl="a">Copy Markdown</span><span class="lbl" data-lbl="b">Copied</span></span>
+          </button>
+          <button id="downloadBtn" class="btn btn-primary btn-glare">
+            <span class="icon" data-icon="download"></span>
+            <span class="lbl">Download .md</span>
+            <span class="glare" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-num" id="statFiles">0</span>
+          <span class="stat-label">Files</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" id="statSize">0 B</span>
+          <span class="stat-label">Total size</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" id="statTokens">~0</span>
+          <span class="stat-label">Estimated tokens</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" id="statIgnored">0</span>
+          <span class="stat-label">Ignored</span>
+        </div>
+      </div>
+
+      <div class="studio-grid">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Files</h3>
+            <span class="muted" id="ignoredNote"></span>
+          </div>
+          <div class="tree" id="tree"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Capsule</h3>
+            <label class="check">
+              <input type="checkbox" id="treeToggle" checked>
+              <span>Include tree</span>
+            </label>
+          </div>
+          <div class="capsule-controls">
+            <input id="ignoreInput" class="text-input" type="text" placeholder="Extra ignores, e.g. *.lock, vendor/" autocomplete="off" spellcheck="false">
+            <select id="sizeLimit" class="text-input">
+              <option value="2" selected>Max file size: 2 MB</option>
+              <option value="1">Max file size: 1 MB</option>
+              <option value="5">Max file size: 5 MB</option>
+              <option value="0">Max file size: none</option>
+            </select>
+          </div>
+          <pre class="preview" id="preview"></pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>MIT licensed. Zero dependencies.</span>
+    <span>Micro interactions adapted from <a href="https://amicro.vercel.app" target="_blank" rel="noreferrer">Amicro</a>.</span>
+  </footer>
+
+  <input type="file" id="folderInput" webkitdirectory multiple hidden>
+
+  <div class="dropzone" id="dropzone" hidden>
+    <div class="dropzone-inner">
+      <span class="dropzone-icon" data-icon="folder-open"></span>
+      Drop your project folder
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
